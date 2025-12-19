@@ -12,5 +12,5 @@ The outputs are designed to pair with QGIS workflows (joining KPI tables to spat
 - sql/problem_zones.sql — filters zones below an on-time threshold (CTE)
 
 ## Skills
-SQL (CTEs, joins, aggregation) • GIS/QGIS • Spatial analysis workflow support
-Window functions • Time-series KPIs • QA checks
+SQL (CTEs, joins, aggregation) • GIS/QGIS • Spatial analysis workflow support • Window functions • Time-series KPIs • QA checks
+
