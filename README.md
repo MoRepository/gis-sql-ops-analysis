@@ -13,3 +13,4 @@ The outputs are designed to pair with QGIS workflows (joining KPI tables to spat
 
 ## Skills
 SQL (CTEs, joins, aggregation) • GIS/QGIS • Spatial analysis workflow support
+Window functions • Time-series KPIs • QA checks
