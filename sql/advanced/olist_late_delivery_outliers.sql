@@ -1,6 +1,8 @@
--- Requires: Postgres
--- Uses: olist.orders_delays (a view/table that includes delay_days + customer location fields)
--- Output: areas (state/city/zip_prefix) whose p90 delay is extreme vs global distribution
+
+-- Late delivery outliers (Olist / PostgreSQL)
+-- Uses: olist.orders_delays (must include delay_days + customer_state/city/zip_prefix)
+-- Note: thresholds are tuned for Olist at ZIP-prefix granularity.
+-- If this returns 0 rows, lower late_deliveries >= 10 to >= 5, or change cutoff from 0.90 to 0.85.
 
 WITH area_rollup AS (
   SELECT
@@ -8,24 +10,29 @@ WITH area_rollup AS (
     customer_city,
     customer_zip_code_prefix,
     COUNT(*) AS delivered_count,
-    AVG(delay_days)::numeric(10,2) AS avg_delay_days,
-    percentile_cont(0.90) WITHIN GROUP (ORDER BY delay_days) AS p90_area_delay
+
+    -- late-only metrics (delay_days > 0)
+    COUNT(*) FILTER (WHERE delay_days > 0) AS late_deliveries,
+    AVG(delay_days) FILTER (WHERE delay_days > 0)::numeric(10,2) AS avg_late_delay_days,
+    percentile_cont(0.90) WITHIN GROUP (ORDER BY delay_days)
+      FILTER (WHERE delay_days > 0) AS p90_late_delay_days
+
   FROM olist.orders_delays
-  -- focus on LATE deliveries only (delay > 0). remove this line if you want early+late together.
-  WHERE delay_days > 0
   GROUP BY 1,2,3
+
+  -- Stability + enough late rows to compute a meaningful p90
   HAVING COUNT(*) >= 50
+     AND COUNT(*) FILTER (WHERE delay_days > 0) >= 10
 ),
-stats AS (
+cutoff AS (
   SELECT
-    percentile_cont(0.95) WITHIN GROUP (ORDER BY p90_area_delay) AS global_p95_p90_area_delay,
-    percentile_cont(0.99) WITHIN GROUP (ORDER BY p90_area_delay) AS global_p99_p90_area_delay
+    percentile_cont(0.90) WITHIN GROUP (ORDER BY p90_late_delay_days) AS outlier_cutoff
   FROM area_rollup
 ),
-ranked_areas AS (
+ranked AS (
   SELECT
     a.*,
-    DENSE_RANK() OVER (ORDER BY p90_area_delay DESC) AS p90_rank
+    DENSE_RANK() OVER (ORDER BY p90_late_delay_days DESC) AS p90_rank
   FROM area_rollup a
 )
 SELECT
@@ -33,13 +40,15 @@ SELECT
   r.customer_city,
   r.customer_zip_code_prefix,
   r.delivered_count,
-  r.avg_delay_days,
-  r.p90_area_delay,
+  r.late_deliveries,
+  r.avg_late_delay_days,
+  r.p90_late_delay_days,
   r.p90_rank,
-  s.global_p95_p90_area_delay,
-  s.global_p99_p90_area_delay
-FROM ranked_areas r
-CROSS JOIN stats s
-WHERE r.p90_area_delay >= s.global_p95_p90_area_delay
-ORDER BY r.p90_area_delay DESC, r.delivered_count DESC
+  c.outlier_cutoff
+FROM ranked r
+CROSS JOIN cutoff c
+WHERE r.p90_late_delay_days >= c.outlier_cutoff
+ORDER BY r.p90_late_delay_days DESC, r.delivered_count DESC
 LIMIT 50;
+
+
