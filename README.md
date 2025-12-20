@@ -11,6 +11,14 @@ The outputs are designed to pair with QGIS workflows (joining KPI tables to spat
 - sql/zone_kpis.sql — KPI summary by zone
 - sql/problem_zones.sql — filters zones below an on-time threshold (CTE)
 
+## Portfolio highlights (PostgreSQL + Olist dataset)
+
+**Advanced SQL**
+- `sql/advanced/olist_late_delivery_outliers.sql` — percentile-based late delivery hotspot detection (p90 + global cutoff)
+- `sql/advanced/olist_weekly_on_time_change_detection.sql` — weekly on-time trend with LAG change flags + 4-week moving average
+- `sql/advanced/olist_weekly_cancellation_rate_by_state.sql` — weekly cancellation rate trend + 4-week moving average
+
+
 ## Skills
 SQL (CTEs, joins, aggregation) • GIS/QGIS • Spatial analysis workflow support • Window functions • Time-series KPIs • QA checks
 
