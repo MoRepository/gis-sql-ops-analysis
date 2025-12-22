@@ -24,4 +24,4 @@ Goal: turn the SQL outputs from the Olist delivery analysis into a simple map wo
 4) Style by p90 delay (graduated) and late_count (labels)
 
 ## Output
-- Screenshot(s) will be added here after styling (map + legend + notes).
+- Map screenshot: (to be added)
