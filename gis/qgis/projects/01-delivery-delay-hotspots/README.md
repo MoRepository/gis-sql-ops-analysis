@@ -28,4 +28,6 @@
 
 ![Late Delivery Hotspots (Brazil)](images/Brazil_Late_Delivery_Hotspot.png)
 
+- Heatmap shows the spatial density of late deliveries (hotter = more late orders clustered).
+
 [Download PDF](images/Brazil_Late_Delivery_Hotspot.pdf)
