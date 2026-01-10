@@ -26,7 +26,7 @@ Goal: turn the SQL outputs from the Olist delivery analysis into a simple map wo
 ## Output
 ## Late Delivery Hotspots (Brazil)
 
-![Late Delivery Hotspots (Brazil)](images/Brazil_Late_Delivery_Hotspots1.png)
+![Late Delivery Hotspots (Brazil)](images/Brazil_Late_Delivery_Hotspots.png)
 
-[Download PDF](images/Brazil_Late_Delivery_Hotspots2.pdf)
+[Download PDF](images/Brazil_Late_Delivery_Hotspots.pdf)
 
