@@ -24,9 +24,8 @@ Goal: turn the SQL outputs from the Olist delivery analysis into a simple map wo
 4) Style by p90 delay (graduated) and late_count (labels)
 
 ## Output
-## Late Delivery Hotspots (Brazil)
+### Late Delivery Hotspots (Brazil)
 
-![Late Delivery Hotspots (Brazil)](images/Brazil_Late_Delivery_Hotspots.png)
+![Late Delivery Hotspots (Brazil)](images/Brazil_Late_Delivery_Hotspot.png)
 
-[Download PDF](images/Brazil_Late_Delivery_Hotspots.pdf)
-
+[Download PDF](images/Brazil_Late_Delivery_Hotspot.pdf)
